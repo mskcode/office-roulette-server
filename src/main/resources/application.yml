@@ -1,0 +1,39 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:postgresql://${OR_DB_HOST}:5432/ordb?ssl=true&sslmode=${OR_DB_SSLMODE:require}
+    driver-class-name: org.postgresql.Driver
+    username: ${OR_DB_USERNAME}
+    password: ${OR_DB_PASSWORD}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      transaction-isolation: TRANSACTION_READ_COMMITTED
+      maximum-pool-size: ${OR_DB_CONNPOOL_MAX_SIZE:10}
+      leak-detection-threshold: 30000      # 30 seconds
+      connection-timeout: 2000             # 2 seconds
+      max-lifetime: 1800000                # 30 minutes
+  flyway:
+    enabled: true
+    locations: classpath:/database/migration/postgresql
+
+server:
+  port: ${OR_SERVER_PORT:8080}
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: unittest
+  datasource:
+    url: jdbc:h2:mem:ordb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=PostgreSQL
+    username: oruser
+    password: password
+    driver-class-name: org.h2.Driver
+  flyway:
+    locations: classpath:/database/migration/h2
