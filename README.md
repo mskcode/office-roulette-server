@@ -2,6 +2,10 @@
 
 When you need to decide who gets the next promotion.
 
+## TO-DO
+
+* [ ] Database schema is missing indices.
+
 ## Development
 
 ### Running server locally with Docker Compose

@@ -9,6 +9,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       transaction-isolation: TRANSACTION_READ_COMMITTED
+      # set only maximum-pool-size (no minimum-idle) for fixed pool size
       maximum-pool-size: ${OR_DB_CONNPOOL_MAX_SIZE:10}
       leak-detection-threshold: 30000      # 30 seconds
       connection-timeout: 2000             # 2 seconds
