@@ -38,8 +38,7 @@ public class DrawDao {
     }
 
     public Optional<Draw> findDrawById(long drawId) {
-        var result = jdbcTemplate.query("SELECT * FROM draws WHERE id = ?", drawRowMapper, drawId);
-        return result.size() > 0 ? Optional.of(result.get(0)) : Optional.empty();
+        return sqlService.queryOne("SELECT * FROM draws WHERE id = ?", drawRowMapper, drawId);
     }
 
     public List<Draw> findDraws() {

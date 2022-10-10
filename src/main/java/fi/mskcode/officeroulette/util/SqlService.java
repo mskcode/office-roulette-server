@@ -17,6 +17,7 @@ import java.util.UUID;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +31,15 @@ public class SqlService {
 
     public int count(String sql, Object... args) {
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> rs.getInt(1), args);
+    }
+
+    public <T> Optional<T> queryOne(String sql, RowMapper<T> rowMapper, Object... args) {
+        try {
+            var result = jdbcTemplate.queryForObject(sql, rowMapper, args);
+            return Optional.ofNullable(result);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     /**

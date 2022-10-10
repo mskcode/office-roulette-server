@@ -4,9 +4,20 @@ When you need to decide who gets the next promotion.
 
 ## TO-DO
 
-* [ ] Database schema is missing indices.
+* [ ] Database
+    * [ ] Database schema is missing indices.
+    * [ ] employees table should have a naturally unique column to prevent
+          duplicate entries
 
 ## Development
+
+### Running unit test
+
+To reformat code and run unit tests, execute following command.
+
+```shell
+mvn spotless:apply clean verify
+```
 
 ### Running server locally with Docker Compose
 

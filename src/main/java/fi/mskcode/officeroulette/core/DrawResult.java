@@ -1,3 +1,6 @@
 package fi.mskcode.officeroulette.core;
 
-public record DrawResult() {}
+import java.time.Instant;
+import java.util.UUID;
+
+public record DrawResult(long drawId, UUID winnerEmployeeId, Instant resultInsertTime) {}

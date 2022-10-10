@@ -43,8 +43,8 @@ public class EmployeeDao {
     }
 
     public Optional<Employee> findEmployeeById(UUID employeeId) {
-        var result = jdbcTemplate.query("SELECT * FROM employees WHERE id = ?", employeeRowMapper, employeeId);
-        return result.size() > 0 ? Optional.of(result.get(0)) : Optional.empty();
+        final var sql = "SELECT * FROM employees WHERE id = ?";
+        return sqlService.queryOne(sql, employeeRowMapper, employeeId);
     }
 
     public List<Employee> findEmployees(String nameFilter) {

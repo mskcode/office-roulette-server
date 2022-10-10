@@ -45,12 +45,11 @@ ALTER TABLE draw_employees
 -- table for storing draw results
 CREATE TABLE draw_results
 (
-    id                 UUID                     NOT NULL,
     draw_id            BIGINT                   NOT NULL,
     winner_employee_id UUID                     NOT NULL,
     result_insert_time TIMESTAMP WITH TIME ZONE NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (draw_id)
 );
 
 ALTER TABLE draw_results

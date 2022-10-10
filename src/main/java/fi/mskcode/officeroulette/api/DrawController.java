@@ -35,7 +35,7 @@ public class DrawController {
     }
 
     @RequestMapping(value = "/{drawId}", method = RequestMethod.GET)
-    public FullDrawResponseDto getDraw(@PathVariable("drawId") long drawId) {
+    public FullDrawResponseDto getSingleDraw(@PathVariable("drawId") long drawId) {
         var draw = drawService
                 .findFullDrawById(drawId)
                 .orElseThrow(() -> new ResourceNotFound(format("Draw ID %d does not exist", drawId)));

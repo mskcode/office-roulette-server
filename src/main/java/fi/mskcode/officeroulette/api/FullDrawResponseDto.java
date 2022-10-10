@@ -13,6 +13,6 @@ public record FullDrawResponseDto(
                 draw.draw().id(),
                 draw.draw().status().name(),
                 draw.participants().stream().map(EmployeeResponseDto::from).collect(toImmutableList()),
-                DrawResultResponseDto.from(draw.result()));
+                draw.result().map(DrawResultResponseDto::from).orElse(null));
     }
 }

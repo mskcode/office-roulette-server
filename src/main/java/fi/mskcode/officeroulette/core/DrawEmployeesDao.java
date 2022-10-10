@@ -2,7 +2,7 @@ package fi.mskcode.officeroulette.core;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
-import fi.mskcode.officeroulette.error.NotImplementedException;
+import com.google.common.collect.ImmutableList;
 import fi.mskcode.officeroulette.util.SqlService;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +28,9 @@ public class DrawEmployeesDao {
     }
 
     public List<UUID> enumerateEmployeesParticipatingInDraw(long drawId) {
-        throw new NotImplementedException();
+        final var sql = "SELECT employee_id FROM draw_employees WHERE draw_id = ?";
+        var result = jdbcTemplate.query(sql, (rs, rowNum) -> (UUID) rs.getObject("employee_id"), drawId);
+        return ImmutableList.copyOf(result);
     }
 
     public boolean drawContainsEmployeeId(UUID employeeId) {
