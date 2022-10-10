@@ -93,9 +93,10 @@ public class SqlService {
     }
 
     public long nextInSequence(String sequenceName) {
-        Long value = jdbcTemplate.queryForObject("SELECT nextval('?')", Long.class, notBlank(sequenceName));
+        final var sql = format("SELECT nextval('%s')", sequenceName);
+        Long value = jdbcTemplate.queryForObject(sql, Long.class);
         if (value == null) {
-            throw new RuntimeSqlException(format("Producing next value for sequence %s failed", sequenceName));
+            throw new RuntimeSqlException(format("Producing next value from sequence %s failed", sequenceName));
         }
         return value;
     }

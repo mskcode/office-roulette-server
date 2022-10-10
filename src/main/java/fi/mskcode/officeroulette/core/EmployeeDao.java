@@ -2,11 +2,14 @@ package fi.mskcode.officeroulette.core;
 
 import static fi.mskcode.officeroulette.util.SqlService.readInstant;
 import static fi.mskcode.officeroulette.util.SqlService.readUuid;
+import static fi.mskcode.officeroulette.util.SqlService.toOffsetDateTime;
+import static java.lang.String.format;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import fi.mskcode.officeroulette.util.SqlService;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,15 +36,22 @@ public class EmployeeDao {
                 notNull(employeeId),
                 notBlank(firstName),
                 notBlank(lastName),
-                notNull(employmentStartTime),
-                notNull(status));
+                toOffsetDateTime(notNull(employmentStartTime)),
+                notNull(status).name());
 
         return new Employee(employeeId, firstName, lastName, employmentStartTime, status);
     }
 
-    public final Optional<Employee> findEmployeeById(UUID employeeId) {
+    public Optional<Employee> findEmployeeById(UUID employeeId) {
         var result = jdbcTemplate.query("SELECT * FROM employees WHERE id = ?", employeeRowMapper, employeeId);
         return result.size() > 0 ? Optional.of(result.get(0)) : Optional.empty();
+    }
+
+    public List<Employee> findEmployees(String nameFilter) {
+        final var sql = "SELECT * FROM employees "
+                + "WHERE LOWER(first_name) LIKE LOWER(?) OR LOWER(last_name) LIKE LOWER(?) "
+                + "ORDER BY last_name ASC, first_name ASC";
+        return jdbcTemplate.query(sql, employeeRowMapper, format("%%%s%%", nameFilter), format("%%%s%%", nameFilter));
     }
 
     private final RowMapper<Employee> employeeRowMapper = (rs, rowNum) -> new Employee(

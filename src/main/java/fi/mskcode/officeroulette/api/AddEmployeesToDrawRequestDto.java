@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.UUID;
 
+// couldn't make a record out of this since Java's type-erasure makes List<String> and List<UUID> in method signatures
+// ambiguous
 public class AddEmployeesToDrawRequestDto {
 
     public final long drawId;

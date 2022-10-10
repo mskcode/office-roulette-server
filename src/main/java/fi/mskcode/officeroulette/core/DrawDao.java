@@ -6,6 +6,7 @@ import static fi.mskcode.officeroulette.util.SqlService.toOffsetDateTime;
 
 import fi.mskcode.officeroulette.time.TimeService;
 import fi.mskcode.officeroulette.util.SqlService;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,8 +38,12 @@ public class DrawDao {
     }
 
     public Optional<Draw> findDrawById(long drawId) {
-        var result = jdbcTemplate.query("SELECT * FROM draw WHERE id = ?", drawRowMapper, drawId);
+        var result = jdbcTemplate.query("SELECT * FROM draws WHERE id = ?", drawRowMapper, drawId);
         return result.size() > 0 ? Optional.of(result.get(0)) : Optional.empty();
+    }
+
+    public List<Draw> findDraws() {
+        return jdbcTemplate.query("SELECT * FROM draws", drawRowMapper);
     }
 
     public void updateDrawClosed(long drawId) {

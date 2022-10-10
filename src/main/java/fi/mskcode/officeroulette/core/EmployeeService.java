@@ -1,6 +1,7 @@
 package fi.mskcode.officeroulette.core;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,9 @@ public class EmployeeService {
 
     public Optional<Employee> findEmployeeById(UUID employeeId) {
         return employeeDao.findEmployeeById(employeeId);
+    }
+
+    public List<Employee> findEmployees(String nameFilter) {
+        return employeeDao.findEmployees(nameFilter);
     }
 }

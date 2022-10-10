@@ -1,5 +1,7 @@
 package fi.mskcode.officeroulette.api;
 
+import static fi.mskcode.officeroulette.util.DateTimeUtil.formatAsIso8601;
+
 import fi.mskcode.officeroulette.core.Employee;
 
 public record EmployeeResponseDto(
@@ -10,7 +12,7 @@ public record EmployeeResponseDto(
                 employee.id().toString(),
                 employee.firstName(),
                 employee.lastName(),
-                employee.employmentStartTime().toString(),
+                formatAsIso8601(employee.employmentStartTime()),
                 employee.status().name());
     }
 }

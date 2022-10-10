@@ -28,10 +28,16 @@ public class DrawController {
         return DrawResponseDto.from(draw);
     }
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public DrawsResponseDto getAllDraws() {
+        var draws = drawService.findDraws();
+        return DrawsResponseDto.from(draws);
+    }
+
     @RequestMapping(value = "/{drawId}", method = RequestMethod.GET)
     public FullDrawResponseDto getDraw(@PathVariable("drawId") long drawId) {
         var draw = drawService
-                .findDrawById(drawId)
+                .findFullDrawById(drawId)
                 .orElseThrow(() -> new ResourceNotFound(format("Draw ID %d does not exist", drawId)));
         return FullDrawResponseDto.from(draw);
     }

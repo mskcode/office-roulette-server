@@ -30,8 +30,12 @@ public class DrawService {
         throw new NotImplementedException();
     }
 
-    public Optional<FullDraw> findDrawById(long drawId) {
+    public Optional<FullDraw> findFullDrawById(long drawId) {
         throw new NotImplementedException();
+    }
+
+    public List<Draw> findDraws() {
+        return drawDao.findDraws();
     }
 
     public void addEmployeeIdsToDraw(long drawId, List<UUID> employeeIds) {
