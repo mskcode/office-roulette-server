@@ -2,6 +2,7 @@ package fi.mskcode.officeroulette.core;
 
 import static fi.mskcode.officeroulette.util.SqlService.readInstant;
 import static fi.mskcode.officeroulette.util.SqlService.readUuid;
+import static fi.mskcode.officeroulette.util.SqlService.toOffsetDateTime;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import fi.mskcode.officeroulette.time.TimeService;
@@ -14,13 +15,13 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DrawResultsDao {
+public class DrawResultDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SqlService sqlService;
     private final TimeService timeService;
 
-    public DrawResultsDao(JdbcTemplate jdbcTemplate, SqlService sqlService, TimeService timeService) {
+    public DrawResultDao(JdbcTemplate jdbcTemplate, SqlService sqlService, TimeService timeService) {
         this.jdbcTemplate = jdbcTemplate;
         this.sqlService = sqlService;
         this.timeService = timeService;
@@ -29,7 +30,7 @@ public class DrawResultsDao {
     public DrawResult insertDrawResult(long drawId, UUID winnerEmployeeId) {
         final var sql = "INSERT INTO draw_results (draw_id, winner_employee_id, result_insert_time) VALUES (?,?,?)";
         Instant now = timeService.now();
-        sqlService.updateOne(sql, drawId, notNull(winnerEmployeeId), now);
+        sqlService.updateOne(sql, drawId, notNull(winnerEmployeeId), toOffsetDateTime(now));
         return new DrawResult(drawId, winnerEmployeeId, now);
     }
 

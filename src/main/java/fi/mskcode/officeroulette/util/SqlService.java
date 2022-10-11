@@ -3,6 +3,7 @@ package fi.mskcode.officeroulette.util;
 import static fi.mskcode.officeroulette.util.ValidateMore.isGreaterThan;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.Validate.notBlank;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import fi.mskcode.officeroulette.error.RuntimeSqlException;
 import java.sql.ResultSet;
@@ -53,6 +54,7 @@ public class SqlService {
     public int batchUpdate(String sql, int batchSize, List<Object[]> batch) {
         notBlank(sql);
         isGreaterThan(0, batchSize);
+        notNull(batch);
 
         int[][] batchUpdatedRowCounts = jdbcTemplate.batchUpdate(sql, batch, batchSize, (ps, args) -> {
             for (int i = 0; i < args.length; ++i) {
@@ -69,15 +71,6 @@ public class SqlService {
         return batchUpdate(sql, 100, batch);
     }
 
-    /**
-     * Executes the given SQL and checks that exactly one row was affected, otherwise raises an exception.
-     *
-     * @param sql the SQL statement to execute
-     * @param args parameters for the SQL statement
-     *
-     * @throws EmptyResultDataAccessException if the number of affected rows was zero
-     * @throws IncorrectResultSizeDataAccessException if the number of affected rows is more than one
-     */
     public void updateOne(String sql, Object... args) {
         int updatedRows = jdbcTemplate.update(sql, args);
         if (updatedRows == 0) {
@@ -85,21 +78,6 @@ public class SqlService {
         } else if (updatedRows != 1) {
             throw new IncorrectResultSizeDataAccessException(1, updatedRows);
         }
-    }
-
-    /**
-     * Executes the given SQL and checks that one or more rows was affected, otherwise raises an exception.
-     *
-     * @param sql the SQL statement to execute
-     * @param args parameters for the SQL statement
-     * @return the (non-zero) number of rows updated
-     */
-    public int updateAtLeastOne(String sql, Object... args) {
-        int updatedRows = jdbcTemplate.update(sql, args);
-        if (updatedRows == 0) {
-            throw new EmptyResultDataAccessException(1);
-        }
-        return updatedRows;
     }
 
     public long nextInSequence(String sequenceName) {

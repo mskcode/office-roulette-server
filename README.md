@@ -4,10 +4,20 @@ When you need to decide who gets the next promotion.
 
 ## TO-DO
 
+* [ ] API
+    * [ ] Unimplemented APIs
 * [ ] Database
     * [ ] Database schema is missing indices.
     * [ ] employees table should have a naturally unique column to prevent
           duplicate entries
+* [ ] Code
+    * [ ] Code might not be transactionally safe or sane
+
+## Usage
+
+### Using API with Postman
+
+There's an exported Postman collection under `postman/` directory.
 
 ## Development
 

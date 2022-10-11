@@ -10,12 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DrawEmployeesDao {
+public class DrawEmployeeDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final SqlService sqlService;
 
-    public DrawEmployeesDao(JdbcTemplate jdbcTemplate, SqlService sqlService) {
+    public DrawEmployeeDao(JdbcTemplate jdbcTemplate, SqlService sqlService) {
         this.jdbcTemplate = jdbcTemplate;
         this.sqlService = sqlService;
     }

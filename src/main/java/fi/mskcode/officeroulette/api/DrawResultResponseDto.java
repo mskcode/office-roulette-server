@@ -1,11 +1,13 @@
 package fi.mskcode.officeroulette.api;
 
-import fi.mskcode.officeroulette.core.DrawResult;
-import fi.mskcode.officeroulette.error.NotImplementedException;
+import static fi.mskcode.officeroulette.util.DateTimeUtil.formatAsIso8601;
 
-public record DrawResultResponseDto() {
+import fi.mskcode.officeroulette.core.DrawResult;
+
+public record DrawResultResponseDto(String winnerEmployeeId, String resultTime) {
 
     public static DrawResultResponseDto from(DrawResult drawResult) {
-        throw new NotImplementedException();
+        return new DrawResultResponseDto(
+                drawResult.winnerEmployeeId().toString(), formatAsIso8601(drawResult.resultInsertTime()));
     }
 }

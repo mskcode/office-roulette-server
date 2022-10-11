@@ -47,8 +47,13 @@ public class DrawDao {
 
     public void updateDrawClosed(long drawId) {
         var now = timeService.now();
+        // the explicit status check is our safeguard against race conditions
         sqlService.updateOne(
-                "UPDATE draws SET status = ?, close_time = ? WHERE id = ?", Draw.Status.CLOSED.name(), now, drawId);
+                "UPDATE draws SET status = ?, close_time = ? WHERE id = ? AND status = ?",
+                Draw.Status.CLOSED.name(),
+                toOffsetDateTime(now),
+                drawId,
+                Draw.Status.OPEN.name());
     }
 
     public boolean isExistingDrawId(long drawId) {

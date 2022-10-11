@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
 @Configuration
-public class RequestFilterConfig {
+class RequestFilterConfig {
 
     @Bean
     public AbstractRequestLoggingFilter loggingFilter() {
