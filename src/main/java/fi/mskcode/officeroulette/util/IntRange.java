@@ -1,4 +1,4 @@
-package fi.mskcode.officeroulette.prng;
+package fi.mskcode.officeroulette.util;
 
 import static java.lang.Math.abs;
 import static java.lang.String.format;

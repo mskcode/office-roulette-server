@@ -1,5 +1,7 @@
 package fi.mskcode.officeroulette.prng;
 
+import fi.mskcode.officeroulette.util.IntRange;
+
 public interface Prng {
 
     /**

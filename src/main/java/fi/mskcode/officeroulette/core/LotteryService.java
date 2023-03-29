@@ -1,8 +1,8 @@
 package fi.mskcode.officeroulette.core;
 
-import fi.mskcode.officeroulette.prng.IntRange;
 import fi.mskcode.officeroulette.prng.Prng;
 import fi.mskcode.officeroulette.prng.WeakPrng;
+import fi.mskcode.officeroulette.util.IntRange;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
