@@ -13,5 +13,8 @@ FROM eclipse-temurin:17-jre-alpine
 LABEL maintainer=""
 
 COPY --from=build /build/target/officeroulette.jar /officeroulette.jar
+
+# FIXME transition into using entrypoint script when higher startup
+# customization is needed
 ENTRYPOINT [ "java" ]
 CMD [ "-jar", "officeroulette.jar"]
