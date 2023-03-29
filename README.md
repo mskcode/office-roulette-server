@@ -10,8 +10,10 @@ When you need to decide who gets the next promotion.
     * [ ] Database schema is missing indices.
     * [ ] employees table should have a naturally unique column to prevent
           duplicate entries
+    * [ ] The H2 database should probably be exchanged into using real
+          PostgreSQL (run in Docker while unit testing)
 * [ ] Code
-    * [ ] Code might not be transactionally safe or sane
+    * [ ] Code is not transactionally safe or sane
 
 ## Usage
 
@@ -40,7 +42,7 @@ docker-compose up [--build]
 ```
 
 The optional `--build` parameter forcefully builds the server container if
-needed since Docker cannot detect stale build.
+needed since Docker cannot detect stale builds.
 
 Once the containers are up and running, you can test if the server responds to
 an HTTP request by executing following command.
