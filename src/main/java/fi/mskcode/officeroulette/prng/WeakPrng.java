@@ -41,7 +41,7 @@ public class WeakPrng implements Prng {
         if (count <= 0) {
             throw new IllegalArgumentException("Count must be at least 1");
         }
-        if (range.distance() < count) {
+        if (range.length < count) {
             throw new IllegalArgumentException(format("Range %s doesn't hold %d unique numbers", range, count));
         }
 
