@@ -21,7 +21,13 @@
     </properties>
 
     <dependencies>
-        <!-- Runtime dependencies -->
+        <!--
+        Runtime dependencies
+
+        You can check what dependency versions Spring Boot provides from here:
+        https://docs.spring.io/spring-boot/docs/current/reference/html/dependency-versions.html
+        -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -130,7 +136,7 @@
                         </format>
                     </formats>
                     <java>
-                        <removeUnusedImports />
+                        <removeUnusedImports/>
                         <palantirJavaFormat>
                             <version>2.27.0</version>
                         </palantirJavaFormat>
