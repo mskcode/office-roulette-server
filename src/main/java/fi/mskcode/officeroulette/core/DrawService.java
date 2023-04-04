@@ -4,11 +4,12 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 import static java.lang.String.format;
 
 import fi.mskcode.officeroulette.error.ImplementationBugException;
+import fi.mskcode.officeroulette.util.TransactionService;
+import fi.mskcode.officeroulette.util.TransactionUtils;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DrawService {
@@ -18,26 +19,30 @@ public class DrawService {
     private final DrawResultDao drawResultDao;
     private final EmployeeDao employeeDao;
     private final LotteryService lotteryService;
+    private final TransactionService transactionService;
 
     public DrawService(
             DrawDao drawDao,
             DrawEmployeeDao drawEmployeeDao,
             DrawResultDao drawResultDao,
             EmployeeDao employeeDao,
-            LotteryService lotteryService) {
+            LotteryService lotteryService,
+            TransactionService transactionService) {
         this.drawDao = drawDao;
         this.drawEmployeeDao = drawEmployeeDao;
         this.drawResultDao = drawResultDao;
         this.employeeDao = employeeDao;
         this.lotteryService = lotteryService;
+        this.transactionService = transactionService;
     }
 
     public Draw openNewDraw() {
         return drawDao.insertOpenDraw();
     }
 
-    @Transactional
     public void executeDraw(long drawId) {
+        TransactionUtils.validateTransactionNotActive();
+
         var draw = findDrawByIdOrThrow(drawId);
         if (draw.status() != Draw.Status.OPEN) {
             throw new IllegalArgumentException(format("Draw ID %d is not OPEN", drawId));
@@ -50,8 +55,10 @@ public class DrawService {
 
         var winnerEmployeeId = lotteryService.selectWinningEmployee(drawParticipants);
 
-        drawResultDao.insertDrawResult(drawId, winnerEmployeeId);
-        drawDao.updateDrawClosed(drawId);
+        transactionService.txRequired(() -> {
+            drawResultDao.insertDrawResult(drawId, winnerEmployeeId);
+            drawDao.updateDrawClosed(drawId);
+        });
     }
 
     public Optional<Draw> findDrawById(long drawId) {
@@ -81,6 +88,8 @@ public class DrawService {
     }
 
     public void addEmployeeIdsToDraw(long drawId, List<UUID> employeeIds) {
+        TransactionUtils.validateTransactionNotActive();
+
         var draw = drawDao.findDrawById(drawId)
                 .orElseThrow(() -> new IllegalArgumentException(format("Draw ID %d does not exist", drawId)));
 
@@ -88,12 +97,17 @@ public class DrawService {
             throw new IllegalArgumentException(format("Draw ID %d is not OPEN for participation", drawId));
         }
 
+        // FIXME race-condition: the following already-added-exclusion and
+        //  addition can end up raising exception if another request beat us
+        //  to adding these employees before us
+
         var notParticipatingEmployeeIds = employeeIds.stream()
                 .filter(employeeId -> !drawEmployeeDao.drawContainsEmployeeId(employeeId))
                 .collect(toImmutableList());
 
-        // FIXME can end up raising exception if another request beat us to adding these employees before us
-        drawEmployeeDao.insertEmployeesToDraw(drawId, notParticipatingEmployeeIds);
+        transactionService.txRequired(() -> {
+            drawEmployeeDao.insertEmployeesToDraw(drawId, notParticipatingEmployeeIds);
+        });
     }
 
     private Draw findDrawByIdOrThrow(long drawId) {

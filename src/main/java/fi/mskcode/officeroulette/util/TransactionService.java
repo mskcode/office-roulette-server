@@ -14,7 +14,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionCallback;
 
 /**
- * Transaction management with {@code @Transaction} annotations can get iffy
+ * Transaction management with {@code @Transactional} annotations can get iffy
  * quickly since you cannot use them on non-component classes (classes that
  * don't have {@code @Component} or {@code @Service} annotation) or on
  * non-public methods.
