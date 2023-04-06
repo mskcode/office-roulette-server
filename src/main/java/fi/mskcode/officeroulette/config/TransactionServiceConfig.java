@@ -13,8 +13,9 @@ class TransactionServiceConfig {
     public TransactionService transactionService(
             PlatformTransactionManager transactionManager,
             @Value("${spring.datasource.hikari.transaction-isolation}") String hikariDefaultIsolationLevel) {
-        return new TransactionService(
-                transactionManager,
-                TransactionService.IsolationLevel.fromHikariIsolationLevel(hikariDefaultIsolationLevel));
+        var defaultIsolationLevel =
+                TransactionService.IsolationLevel.fromHikariIsolationLevel(hikariDefaultIsolationLevel);
+        var defaultPropagationBehaviour = TransactionService.PropagationBehaviour.REQUIRED;
+        return new TransactionService(transactionManager, defaultIsolationLevel, defaultPropagationBehaviour);
     }
 }

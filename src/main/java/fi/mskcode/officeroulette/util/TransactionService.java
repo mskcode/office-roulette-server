@@ -198,17 +198,20 @@ public class TransactionService {
     private final IsolationLevel defaultIsolationLevel;
     private final PropagationBehaviour defaultPropagationBehaviour;
 
-    /** Constructs a new instance with given transaction manager and isolation level. */
-    public TransactionService(PlatformTransactionManager transactionManager, IsolationLevel defaultIsolationLevel) {
+    /** Constructs a new instance with given transaction manager, isolation level and propagation behaviour. */
+    public TransactionService(
+            PlatformTransactionManager transactionManager,
+            IsolationLevel defaultIsolationLevel,
+            PropagationBehaviour defaultPropagationBehaviour) {
         this.transactionManager = notNull(transactionManager);
         this.defaultIsolationLevel = notNull(defaultIsolationLevel);
-        this.defaultPropagationBehaviour = PropagationBehaviour.REQUIRED;
+        this.defaultPropagationBehaviour = notNull(defaultPropagationBehaviour);
         // TODO transactionManager validateExistingTransactions
     }
 
-    /** Constructs a new instance with {@code READ_COMMITTED} isolation level. */
+    /** Constructs a new instance with {@code READ_COMMITTED} isolation level and {@code REQUIRED} propagation behaviour. */
     public TransactionService(PlatformTransactionManager transactionManager) {
-        this(transactionManager, IsolationLevel.READ_COMMITTED);
+        this(transactionManager, IsolationLevel.READ_COMMITTED, PropagationBehaviour.REQUIRED);
     }
 
     /**
